@@ -1,0 +1,21 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+	<div class="card mb-3 ms-5 mt-4" style="width: 18rem;">
+
+		{# {% for image in licence.images %}
+
+			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
+
+		{% endfor %}   #}
+		<div class="card-body">
+			<div class="card-body">
+				<h1>{{licence.name}}</h1>
+				<h2>{{licence.description}}</h2>
+				<a href="{{path('admin_licence_list')}}" class="btn btn-primary">Retourner aux licences</a>
+			</div>
+		</div>
+	{% endblock %}
+
+  

@@ -1,0 +1,19 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+{% for licence in licences %}
+    
+   {# <div class="cardd mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
+			<img src="{{asset('media/' ~ licence.images[0].src)}}" alt="{{licence.images[0].alt}}" class="licenced-img-top" width= 200px> #}
+  <div class="card-body"> 
+  <h1>{{licence.name}}</h1> 
+<h2>{{licence.description}}</h2>
+<a href="{{path('admin_licence_show', {'id' : licence.id}) }}"  class=" btn btn-primary">
+					Voir la licence
+				</a>  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

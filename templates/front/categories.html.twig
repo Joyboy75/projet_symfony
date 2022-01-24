@@ -1,0 +1,19 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+{% for category in categories %}
+    
+   {# <div class="cardd mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
+			<img src="{{asset('media/' ~ category.images[0].src)}}" alt="{{category.images[0].alt}}" class="categoryd-img-top" width= 200px> #}
+  <div class="card-body"> 
+  <h1>{{category.name}}</h1> 
+<h2>{{category.description}}</h2>
+<a href="{{path('category_show', {'id' : category.id}) }}"  class=" btn btn-primary">
+					Voir le category
+				</a>  </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
