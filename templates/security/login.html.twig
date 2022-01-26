@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+
+{% block body %}
+	<form method="post">
+		{% if error %}
+			<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+		{% endif %}
+
+		{% if app.user %}
+			<div class="mb-3">
+				Vous êtes connecté(e) en tant que
+				{{ app.user.username }},
+				<a href="{{ path('app_logout') }}">Logout</a>
+			</div>
+
+			{# {{ app.user.date | date('d-m-Y') }} #}
+		{% endif %}
+
+		{% if not app.user %}
+			<h1 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h1>
+			<label for="inputEmail">Email</label>
+			<input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+			<label for="inputPassword">Password</label>
+			<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+			<input
+			type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+
+			{#
+					        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+					        See https://symfony.com/doc/current/security/remember_me.html
+					
+					        <div class="checkbox mb-3">
+					            <label>
+					                <input type="checkbox" name="_remember_me"> Remember me
+					            </label>
+					        </div>
+					    #}
+
+			<button class="btn btn-lg btn-primary" type="submit">
+				Sign in
+			</button>
+
+		{% endif %}
+	</form>
+
+	{% if app.user %}
+
+		<h2>{{ app.user.name}}</h2>
+		<h2>{{ app.user.firstname}}</h2>
+		<h2>{{ app.user.adress}}</h2>
+		<h2>{{ app.user.city}}</h2>
+		<h2>{{ app.user.zipcode}}</h2>
+
+
+		<a href="{{path("user_update")}}">Modifier votre compte</a>
+		<a href="{{path("user_delete")}}">Supprimer votre compte</a>
+
+	{% endif %}
+
+
+	{% if app.user %}
+		<hr>
+		<h2>Commentaires de
+			{{ app.user.name}}
+			{{ app.user.firstname}}</h2>
+
+		{% for comment in app.user.comments %}
+
+			<h4>Commentaires sur
+				{{ comment.product.name }}</h4>
+			<h4>Le :
+				{{ comment.date | date('d/m/Y')}}</h4>
+			<p>{{ comment.content}}</p>
+
+			<a href="{{path("comment_update", {'id' : comment.id})}}">Modifier votre commentaire</a>
+
+			<a href="{{path("comment_delete", {'id' : comment.id})}}">Supprimer votre commentaire</a>
+
+		{% endfor %}
+
+	{% endif %}
+
+
+	{% if not app.user %}
+
+		<a href="{{path("user_insert")}}">Créer votre compte</a>
+
+	{% endif %}
+
+{% endblock %}

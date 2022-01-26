@@ -1,14 +1,14 @@
-{% extends "front/base.html.twig" %}
+{% extends "admin/base.html.twig" %}
 
 {% block main %}
 
 	<div class="card mb-3 ms-5 mt-4" style="width: 18rem;">
 
-		{# {% for image in product.images %}
+		{% for image in product.images %}
 
 			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
 
-		{% endfor %}   #}
+		{% endfor %}  
 		<div class="card-body">
 			<div class="card-body">
 				<h1>{{product.name}}</h1>

@@ -1,21 +1,41 @@
-{% extends "front/base.html.twig" %}
+{% extends "admin/base.html.twig" %}
 
 {% block main %}
 
 	<div class="card mb-3 ms-5 mt-4" style="width: 18rem;">
 
-		{# {% for image in licence.images %}
-
-			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
-
-		{% endfor %}   #}
 		<div class="card-body">
 			<div class="card-body">
 				<h1>{{licence.name}}</h1>
 				<h2>{{licence.description}}</h2>
 				<a href="{{path('admin_licence_list')}}" class="btn btn-primary">Retourner aux licences</a>
 			</div>
-		</div>
-	{% endblock %}
 
-  
+			<a href="{{ path('admin_update_licence', {'id' : licence.id}) }}">Modifier</a>
+			<a href="{{ path('admin_delete_licence', {'id' : licence.id} )}}">Supprimer</a>
+		</div>
+
+	</div>
+
+
+	<h2>Voici les products de la licence {{ licence.name }} :</h2>
+
+	{% for product in licence.products %}
+
+		<div
+			class="card-body d-inline-block">
+
+			{% for image in product.images %}
+
+			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
+
+			{% endfor %}
+				<h3><a href="{{path("admin_product_show", {'id' : product.id})}}">{{product.name}}</a></h3>
+			</p>
+		</div>
+
+
+	{% endfor %}
+
+
+{% endblock %}

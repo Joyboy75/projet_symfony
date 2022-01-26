@@ -1,21 +1,44 @@
-{% extends "front/base.html.twig" %}
+{% extends "admin/base.html.twig" %}
 
 {% block main %}
 
 	<div class="card mb-3 ms-5 mt-4" style="width: 18rem;">
 
-		{# {% for image in category.images %}
-
-			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
-
-		{% endfor %}   #}
 		<div class="card-body">
 			<div class="card-body">
 				<h1>{{category.name}}</h1>
 				<h2>{{category.description}}</h2>
 				<a href="{{path('admin_category_list')}}" class="btn btn-primary">Retourner aux categories</a>
 			</div>
+
+			<a href="{{ path('admin_update_category', {'id' : category.id}) }}">Modifier</a>
+			<a href="{{ path('admin_delete_category', {'id' : category.id} )}}">Supprimer</a>
 		</div>
-	{% endblock %}
+
+	</div>
+
+
+	<h2>Voici les products de la category {{ category.name }} :</h2>
+
+	{% for product in category.products %}
+
+		<div
+			class="card-body d-inline-block">
+
+			{% for image in product.images %}
+
+			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
+
+			{% endfor %}
+				<h3><a href="{{path("admin_product_show", {'id' : product.id})}}">{{product.name}}</a></h3>
+			</p>
+		</div>
+
+
+	{% endfor %}
+
+
+{% endblock %}
+
 
   

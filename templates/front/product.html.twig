@@ -1,22 +1,52 @@
-{% extends "admin/base.html.twig" %}
+{% extends "front/base.html.twig" %}
 
 {% block main %}
 
 	<div class="card mb-3 ms-5 mt-4" style="width: 18rem;">
 
-		{# {% for image in product.images %}
+		{% for image in product.images %}
 
 			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
 
-		{% endfor %}   #}
+		{% endfor %}
 		<div class="card-body">
 			<div class="card-body">
 				<h1>{{product.name}}</h1>
 				<h2>{{product.price}}</h2>
-				<h3>{{product.stock}}</h3>		
+				<h3>{{product.stock}}</h3>
 				<a href="{{path('product_list')}}" class="btn btn-primary">Retourner aux products</a>
 			</div>
 		</div>
-	{% endblock %}
 
-  
+		<hr>
+		<h2>Commentaires</h2>
+
+		{% if product.comments  %}
+			{% for comment in product.comments %}
+
+				<h3>Par :
+					{{comment.user.name}}
+					{{comment.user.firstname}}</h3>
+				<h3>Le :
+					{{comment.date | date('d/m/Y')}}</h3>
+				<p>{{comment.content}}</p>
+
+				{% if app.user is same as (comment.user) %}
+					<a href="{{path("comment_update", {'id' : comment.id})}}">Modifier votre commentaire</a>
+
+					<a href="{{path("comment_delete", {'id' : comment.id})}}">Supprimer votre commentaire</a>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+
+		{% if app.user %}
+
+			{{form(commentForm)}}
+
+				{%  else %}
+					<h4>Vous devez être connecté(e)</h4>
+
+			{% endif %}
+
+
+		{% endblock %}

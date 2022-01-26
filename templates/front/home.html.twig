@@ -1,0 +1,16 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+
+{% for product in category.products | slice (0,3) %}
+
+<img width=250px src="{{asset('media/' ~ product.images[0].src)}}" alt="{{product.images[0].alt}}">
+
+<h2> {{product.name}}</h2>
+
+
+
+    
+{% endfor %}
+{% endblock %}
