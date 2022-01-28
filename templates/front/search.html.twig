@@ -1,0 +1,14 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+
+<h1>Les résultats de la recherche {{ term }} sont :</h1>
+
+{% for product in products %}
+
+<h2>{{product.name}}</h2>
+
+    
+{% endfor %}
+
+{% endblock %}

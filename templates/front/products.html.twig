@@ -1,10 +1,10 @@
-{% extends "admin/base.html.twig" %}
+{% extends "front/base.html.twig" %}
 
 {% block main %}
 
 {% for product in products %}
     
-   <div class="cardd mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
+   <div class="card mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
 			<img src="{{asset('media/' ~ product.images[0].src)}}" alt="{{product.images[0].alt}}" class="productd-img-top" width= 200px>
   <div class="productd-body"> 
   <h1>{{product.name}}</h1> 

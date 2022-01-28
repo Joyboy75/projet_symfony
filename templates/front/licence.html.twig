@@ -1,4 +1,4 @@
-{% extends "admin/base.html.twig" %}
+{% extends "front/base.html.twig" %}
 
 {% block main %}
 
@@ -16,6 +16,24 @@
 				<a href="{{path('licence_list')}}" class="btn btn-primary">Retourner aux licences</a>
 			</div>
 		</div>
+
+	</div>
+
+		<h2>Voici les products de la licence {{ licence.name }} :</h2>
+
+	{% for product in licence.products %}
+
+		<div
+			class="card-body d-inline-block">
+
+						<img width="200px" src="{{ asset('media/' ~ product.images[0].src) }}" alt="{{ product.images[0].alt }}">
+
+				<h3><a href="{{path("product_show", {'id' : product.id})}}">{{product.name}}</a></h3>
+			
+		</div>
+
+
+	{% endfor %}
 	{% endblock %}
 
   

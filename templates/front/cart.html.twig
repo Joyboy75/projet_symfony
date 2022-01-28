@@ -1,0 +1,23 @@
+{% extends "front/base.html.twig" %}
+
+{% block main %}
+	<hr>
+
+	{% if cartProducts == [] %}
+
+		<h2>Panier vide</h2>
+
+	{% else %}
+
+		{% for cart in cartProducts %}
+
+			<h3>{{ cart.product.name }}</h3>
+			<h3>{{ cart.product.price }}</h3>
+			<h4>{{ cart.quantity }}</h4>
+			<a href="{{ path('delete_cart', {'id' : cart.product.id}) }}" class="btn btn-danger">Supprimer</a>
+			<hr>
+		{% endfor %}
+
+		<a href="{{ path('cart_infos') }}" class="btn btn-primary">Confirmer</a>
+	{% endif %}
+{% endblock %}

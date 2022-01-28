@@ -22,16 +22,14 @@
 
 	{% for product in licence.products %}
 
-		<div
-			class="card-body d-inline-block">
+		<div class="card-body d-inline-block">
 
-			{% for image in product.images %}
+			<img width="200px" src="{{ asset('media/' ~ product.images[0].src) }}" alt="{{ product.images[0].alt }}">
 
-			<img width="200px" src="{{ asset('media/' ~ image.src) }}" alt="{{ image.alt }}">
+			<h3>
+				<a href="{{path("admin_product_show", {'id' : product.id})}}">{{product.name}}</a>
+			</h3>
 
-			{% endfor %}
-				<h3><a href="{{path("admin_product_show", {'id' : product.id})}}">{{product.name}}</a></h3>
-			</p>
 		</div>
 
 

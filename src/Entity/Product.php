@@ -35,18 +35,19 @@ class Product
     private $stock;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
-     */
-    private $category;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Licence::class, inversedBy="products")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $licence;
 
     /**
-     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="product")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Image::class, mappedBy="product")
      */
     private $images;
 
@@ -55,10 +56,28 @@ class Product
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Like::class, mappedBy="product")
+     */
+    private $likes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Dislike::class, mappedBy="product")
+     */
+    private $dislikes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="products")
+     */
+    private $commands;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->dislikes = new ArrayCollection();
+        $this->commands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,18 +121,6 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
     public function getLicence(): ?Licence
     {
         return $this->licence;
@@ -122,6 +129,18 @@ class Product
     public function setLicence(?Licence $licence): self
     {
         $this->licence = $licence;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -181,6 +200,111 @@ class Product
             if ($comment->getProduct() === $this) {
                 $comment->setProduct(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Like[]
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): self
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes[] = $like;
+            $like->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): self
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getProduct() === $this) {
+                $like->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Dislike[]
+     */
+    public function getDislikes(): Collection
+    {
+        return $this->dislikes;
+    }
+
+    public function addDislike(Dislike $dislike): self
+    {
+        if (!$this->dislikes->contains($dislike)) {
+            $this->dislikes[] = $dislike;
+            $dislike->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDislike(Dislike $dislike): self
+    {
+        if ($this->dislikes->removeElement($dislike)) {
+            // set the owning side to null (unless already changed)
+            if ($dislike->getProduct() === $this) {
+                $dislike->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isLikeByUser(User $user)
+    {
+        foreach ($this->likes as $like) {
+            if ($like->getUser() === $user) {
+                return true;
+            }
+        }
+    }
+
+    public function isDislikeByUser(User $user)
+    {
+        foreach ($this->dislikes as $dislike) {
+            if ($dislike->getUser() === $user) {
+                return true;
+            }
+        }
+    }
+
+    /**
+     * @return Collection|Command[]
+     */
+    public function getCommands(): Collection
+    {
+        return $this->commands;
+    }
+
+    public function addCommand(Command $command): self
+    {
+        if (!$this->commands->contains($command)) {
+            $this->commands[] = $command;
+            $command->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommand(Command $command): self
+    {
+        if ($this->commands->removeElement($command)) {
+            $command->removeProduct($this);
         }
 
         return $this;

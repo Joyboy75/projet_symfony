@@ -5,10 +5,12 @@
 
 {% for product in category.products | slice (0,3) %}
 
+    
+<div class="card mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
 <img width=250px src="{{asset('media/' ~ product.images[0].src)}}" alt="{{product.images[0].alt}}">
 
-<h2> {{product.name}}</h2>
-
+<h2> <a href="{{path("product_show", {'id' : product.id})}}">{{product.name}}</a></h2>
+</div>
 
 
     
