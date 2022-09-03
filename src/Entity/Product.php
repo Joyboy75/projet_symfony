@@ -67,9 +67,14 @@ class Product
     private $dislikes;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="products")
+     * @ORM\OneToMany(targetEntity=Cart::class, mappedBy="product")
      */
-    private $commands;
+    private $carts;
+
+    ///**
+    // * @ORM\ManyToMany(targetEntity=Command::class, mappedBy="products")
+    // */
+    //private $commands;
 
     public function __construct()
     {
@@ -77,7 +82,8 @@ class Product
         $this->comments = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->dislikes = new ArrayCollection();
-        $this->commands = new ArrayCollection();
+        // $this->commands = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,10 +289,10 @@ class Product
         }
     }
 
-    /**
-     * @return Collection|Command[]
-     */
-    public function getCommands(): Collection
+    ///**
+    // * @return Collection|Command[]
+    // */
+    /*public function getCommands(): Collection
     {
         return $this->commands;
     }
@@ -305,6 +311,37 @@ class Product
     {
         if ($this->commands->removeElement($command)) {
             $command->removeProduct($this);
+        }
+
+        return $this;
+    }
+    */
+
+    /**
+     * @return Collection|Cart[]
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
+            $cart->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->removeElement($cart)) {
+            // set the owning side to null (unless already changed)
+            if ($cart->getProduct() === $this) {
+                $cart->setProduct(null);
+            }
         }
 
         return $this;

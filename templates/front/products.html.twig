@@ -2,19 +2,27 @@
 
 {% block main %}
 
-{% for product in products %}
-    
-   <div class="card mb-3 ms-5 mt-4 d-inline-block" style="width: 18rem;">
-			<img src="{{asset('media/' ~ product.images[0].src)}}" alt="{{product.images[0].alt}}" class="productd-img-top" width= 200px>
-  <div class="productd-body"> 
-  <h1>{{product.name}}</h1> 
-<h2>{{product.price}}</h2>
-<h3>{{product.stock}}</h3>
-<a href="{{path('product_show', {'id' : product.id}) }}"  class=" btn btn-primary">
-					Voir le product
-				</a>  </div>
-</div>
+	<div class="d-block .m-auto ">
+		<div class="col-12 col-md-6 col-lg-4 col-xxl-3 my-2 my-xxl-0">
+			{% for product in products %}
 
-{% endfor %}
+
+				<div class="card" style="width: 18rem;">
+					<img src="{{asset('media/' ~ product.images[0].src)}}" alt="{{product.images[0].alt}}" class="productd-img-top" width="200px">
+					<div class="productd-body">
+						<h1>{{product.name}}</h1>
+						<h2>{{product.price}}</h2>
+						<h3>{{product.stock}}</h3>
+						<a href="{{path('product_show', {'id' : product.id}) }}" class=" btn btn-primary">
+							Voir le product
+						</a>
+					</div>
+				</div>
+
+
+			{% endfor %}
+
+		</div>
+	</div>
 
 {% endblock %}

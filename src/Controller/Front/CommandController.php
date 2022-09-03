@@ -2,20 +2,20 @@
 
 namespace App\Controller\Front;
 
-use App\Entity\Command;
+use DateTime;
+use App\Entity\Cart;
 use App\Entity\User;
+use App\Entity\Command;
+use Symfony\Component\Mime\Email;
+use App\Repository\UserRepository;
 use App\Repository\CommandRepository;
 use App\Repository\ProductRepository;
-use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\AST\DeleteClause;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CommandController extends AbstractController
 {
@@ -92,9 +92,9 @@ class CommandController extends AbstractController
         }
     }
 
-    /**
-     * @Route("command/create", name="command_create")
-     */
+    // /**
+    //  * @Route("command/create" name="command_create")
+    //  */
     public function commandCreate(
         CommandRepository $commandRepository,
         SessionInterface $sessionInterface,
@@ -104,6 +104,8 @@ class CommandController extends AbstractController
         MailerInterface $mailerInterface,
         Request $request
     ) {
+
+        // Partie commentée méthode ManyToMany
 
         $command = new Command();
 
@@ -117,16 +119,24 @@ class CommandController extends AbstractController
         $cart = $sessionInterface->get('cart', []);
         $price = 0;
 
-        foreach ($cart as $id_product => $quantity) {
+        $command->setPrice($price);
+        $entityManagerInterface->persist($command);
+        $entityManagerInterface->flush();
 
+        foreach ($cart as $id_product => $quantity) {
+            $card = new Cart();
             $product = $productRepository->find($id_product);
             $price_product = $product->getPrice();
             $price = $price + ($price_product * $quantity);
             $product_stock = $product->getStock();
             $product_stock_final = $product_stock - $quantity;
             $product->setStock($product_stock_final);
-            $command->addProduct($product);
+            //$command->addProduct($product);
+            $card->setProduct($product);
+            $card->setQuantity($quantity);
+            $card->setCommand($command);
             $entityManagerInterface->persist($product);
+            $entityManagerInterface->persist($card);
             $entityManagerInterface->flush();
             unset($cart[$id_product]);
             $sessionInterface->set('cart', $cart);
@@ -146,7 +156,7 @@ class CommandController extends AbstractController
                 ->from('test@test.com')
                 ->to($user_mail)
                 ->subject('Commande')
-                ->html('<p> Commande de ' . $price . ' </p>');
+                ->html('<p> Commande de ' . $price . '€ </p>');
 
             $mailerInterface->send($email);
         } else {
@@ -166,7 +176,7 @@ class CommandController extends AbstractController
                 ->from('test@test.com')
                 ->to($email)
                 ->subject('Commande')
-                ->html('<p> Commande de ' . $price . ' </p>');
+                ->html('<p> Commande de ' . $price . '€ </p>');
 
             $mailerInterface->send($mail);
         }
